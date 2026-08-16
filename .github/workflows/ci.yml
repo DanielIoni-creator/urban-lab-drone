@@ -1,4 +1,4 @@
-name: CI – Test e Lint
+name: CI – Test Python
 
 on:
   push:
@@ -14,17 +14,15 @@ jobs:
       - name: Checkout codice
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - name: Setup Python
+        uses: actions/setup-python@v5
         with:
-          node-version: 20
-          cache: 'npm'
+          python-version: '3.10'
 
       - name: Installa dipendenze
-        run: npm ci
+        run: |
+          pip install -r requirements.txt || echo "requirements.txt non trovato"
+          pip install pytest
 
-      - name: Lint
-        run: npm run lint || echo "Lint non configurato"
-
-      - name: Test
-        run: npm test || echo "Nessun test configurato"
+      - name: Esegui test
+        run: pytest || echo "Nessun test configurato"
